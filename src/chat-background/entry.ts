@@ -11,8 +11,9 @@ export const name = 'chat-background'
  * 聊天背景插件：运行时 + 渲染层应用 + 设置行 + 面板动作。
  * 注册模式：slots.inject('settings.section', () => slots.register({...}, Section))。
  */
-export function apply(ctx: Context, config: ToolkitConfig): void {
-  const cfg = config.chatBackground ?? defaultChatBackgroundConfig
+export function apply(ctx: Context, config: ToolkitConfig | undefined): void {
+  // 真实 web boot 不传 config（见 command-palette entry），按默认值运行。
+  const cfg = config?.chatBackground ?? defaultChatBackgroundConfig
   if (!cfg.enabled) return
 
   // 1. 运行时（v0.1：内存模式；Host-backed 后续接入 attachSettings）

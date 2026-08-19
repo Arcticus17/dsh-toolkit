@@ -12,8 +12,9 @@ export const name = 'exporter'
  * ctx.slots.inject(key, cb) 在声明存在时同步执行；cb 内再调
  * ctx.slots.register(options, Component) 注册组件，随 plugin 卸载自动移除。
  */
-export function apply(ctx: Context, config: ToolkitConfig): void {
-  const cfg = config.exporter ?? defaultExporterConfig
+export function apply(ctx: Context, config: ToolkitConfig | undefined): void {
+  // 真实 web boot 不传 config（见 command-palette entry），按默认值运行。
+  const cfg = config?.exporter ?? defaultExporterConfig
   if (!cfg.enabled) return
   void cfg // config 当前仅用于 enabled 开关；后续版本接入 defaultFormat 等
 

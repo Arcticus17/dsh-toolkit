@@ -3,6 +3,7 @@
  * 每个模块是独立插件 entry，经 cordis.yml 组合；本文件为 loader 的客户端装配入口。
  */
 import { Context } from '@deepseek-ai/cordis'
+import type { ToolkitConfig } from '../types.js'
 import * as exporter from '../exporter/entry.js'
 import * as trajectoryMap from '../trajectory-map/entry.js'
 import * as commandPalette from '../command-palette/entry.js'
@@ -29,8 +30,11 @@ export const inject: string[] = [
  * 之后 exporter / chat-background 直接向注册表登记面板动作。
  */
 export function apply(ctx: Context, config: unknown): void {
-  commandPalette.apply(ctx, config as never)
-  exporter.apply(ctx, config as never)
-  trajectoryMap.apply(ctx, config as never)
-  chatBackground.apply(ctx, config as never)
+  // 真实 web boot：config 恒为 undefined（manifest 行不携带 config），
+  // 各模块入口自行回退默认配置。
+  const cfg = config as ToolkitConfig | undefined
+  commandPalette.apply(ctx, cfg)
+  exporter.apply(ctx, cfg)
+  trajectoryMap.apply(ctx, cfg)
+  chatBackground.apply(ctx, cfg)
 }

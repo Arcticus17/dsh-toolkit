@@ -11,8 +11,10 @@ export const name = 'command-palette'
  * 命令面板插件：palette 服务 + 快捷键 + shell.overlay 挂载。
  * 注册模式：slots.inject('shell.overlay', () => slots.register({...}, Overlay))。
  */
-export function apply(ctx: Context, config: ToolkitConfig): void {
-  const cfg = config.commandPalette ?? defaultCommandPaletteConfig
+export function apply(ctx: Context, config: ToolkitConfig | undefined): void {
+  // 真实 web boot：loader 不向 client bundle 的 apply 传 config（manifest 行无 config 字段），
+  // config 恒为 undefined —— 各模块按默认值运行，配置通道留待 settingsScope 接入。
+  const cfg = config?.commandPalette ?? defaultCommandPaletteConfig
 
   // 1. 提供 palette 服务（动作注册表）。cordis Context 是 Proxy：未声明属性
   //    不能直接赋值（cannot set property without provide），必须 ctx.provide。

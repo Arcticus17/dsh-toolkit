@@ -114,6 +114,33 @@ test('client entry: apply 完成全部注册，无未声明槽位异常', () => 
   }
 })
 
+test('client entry: loader 不传 config（undefined）时按默认启用，不抛错', () => {
+  const origWindow = (globalThis as { window?: unknown }).window
+  const origDocument = (globalThis as { document?: unknown }).document
+  ;(globalThis as Record<string, unknown>).window = { addEventListener: () => {}, removeEventListener: () => {} }
+  ;(globalThis as Record<string, unknown>).document = { querySelector: () => null }
+  try {
+    const { ctx, slots } = makeCtx()
+    // 真实 web boot 契约：apply(ctx, undefined)
+    apply(ctx, undefined as never)
+    const palette = ctx.palette as { list: () => Array<{ id: string }> }
+    assert.ok(palette)
+    assert.deepEqual(palette.list().map(a => a.id).sort(), ['chat-background.reset', 'exporter.export'])
+    slots.declare('conversation.session.header.utilities', { kind: 'list', scope: 'session' })
+    slots.declare('conversation.view', { kind: 'list', scope: 'session' })
+    slots.declare('settings.section', { kind: 'list', scope: 'root' })
+    slots.declare('shell.overlay', { kind: 'list', scope: 'root' })
+    assert.deepEqual(
+      slots.registrations.map(r => (r as { id: string }).id).sort(),
+      ['chat-background', 'command-palette', 'dsh-toolkit-export', 'trajectory-map'],
+    )
+  } finally {
+    const g = globalThis as Record<string, unknown>
+    if (origWindow === undefined) delete g.window; else g.window = origWindow
+    if (origDocument === undefined) delete g.document; else g.document = origDocument
+  }
+})
+
 test('client entry: 部分模块禁用不抛错（palette 无条件提供，动作按配置登记）', () => {
   const origWindow = (globalThis as { window?: unknown }).window
   const origDocument = (globalThis as { document?: unknown }).document

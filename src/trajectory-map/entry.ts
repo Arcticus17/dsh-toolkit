@@ -10,8 +10,9 @@ export const name = 'trajectory-map'
  * 流程图插件：注册 conversation.view 标签页（形态 A，已确认决策）。
  * 注册模式对齐 ui-trajectory：slots.inject('conversation.view', () => slots.register({...}, View))。
  */
-export function apply(ctx: Context, config: ToolkitConfig): void {
-  const cfg = config.trajectoryMap ?? defaultTrajectoryMapConfig
+export function apply(ctx: Context, config: ToolkitConfig | undefined): void {
+  // 真实 web boot 不传 config（见 command-palette entry），按默认值运行。
+  const cfg = config?.trajectoryMap ?? defaultTrajectoryMapConfig
   if (!cfg.enabled) return
 
   ctx.slots.inject('conversation.view', () =>

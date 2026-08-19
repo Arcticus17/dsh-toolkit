@@ -77,6 +77,9 @@ npm run clean        # 清理 lib/
 ## 已知限制（v0.1）
 
 - 导出仅覆盖已加载窗口（`truncated` 标注）；整个会话导出列入 v1.0。
+- 客户端配置通道未打通：web boot 的 manifest 不携带 config，client bundle 的 apply
+  收到的是 `undefined` —— cordis.yml 里的 config（enabled 开关/各选项）目前不生效，
+  四个模块按默认值运行；配置投递（settingsScope）列入后续版本。
 - 流程图的工具调用重试徽标暂无数据源（宿主 `llm/retry` 事件为 turn 级、不携带
   callId），`retryCount` 预留为 0，待宿主在 ToolCallBlock 暴露调用级重试后接入。
 - 各模块 UI 挂载点（页头按钮/视图标签页/面板 overlay/设置行）为骨架占位，待宿主接线。
