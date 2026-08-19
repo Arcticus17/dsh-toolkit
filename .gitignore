@@ -1,0 +1,15 @@
+# 依赖与缓存
+node_modules/
+.npm-cache/
+
+# 构建产物（发布/安装前执行 npm run build 生成）
+lib/
+
+# 日志与诊断
+*.log
+bundle-out.txt
+bundle-err.txt
+served-client.js
+
+# 早期调试脚本（含本机路径，不入库）
+dump.mjs

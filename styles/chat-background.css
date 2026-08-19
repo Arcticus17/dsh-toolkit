@@ -1,0 +1,31 @@
+/* 聊天背景 CSS 变量与渲染规则（随包发布，宿主导入） */
+:root {
+  --dsh-chat-bg-image: none;
+  --dsh-chat-bg-color: transparent;
+  --dsh-chat-bg-blur: 0;
+  --dsh-chat-bg-overlay: rgba(0, 0, 0, 0);
+}
+
+[data-conversation-scroll] {
+  background-image: var(--dsh-chat-bg-image);
+  background-color: var(--dsh-chat-bg-color);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+[data-conversation-scroll]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(var(--dsh-chat-bg-blur));
+  -webkit-backdrop-filter: blur(var(--dsh-chat-bg-blur));
+  background: var(--dsh-chat-bg-overlay);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-conversation-scroll] > * {
+  position: relative;
+  z-index: 1;
+}
